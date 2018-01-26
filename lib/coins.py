@@ -1268,6 +1268,7 @@ class Feathercoin(Coin):
         'electrumx-ch-1.feathercoin.ch s t',
     ]
 
+
 class Newyorkcoin(AuxPowMixin, Coin):
     NAME = "Newyorkcoin"
     SHORTNAME = "NYC"
@@ -1282,3 +1283,38 @@ class Newyorkcoin(AuxPowMixin, Coin):
     TX_COUNT_HEIGHT = 3948743
     TX_PER_BLOCK = 2
     REORG_LIMIT = 2000
+
+
+class Teslacoin(Coin):
+    NAME = "Teslacoin"
+    SHORTNAME = "TES"
+    NET = "mainnet"
+    P2PKH_VERBYTE = bytes.fromhex("0b")
+    P2SH_VERBYTES = [bytes.fromhex("08")]
+    WIF_BYTE = bytes.fromhex("80")
+    GENESIS_HASH = ('000002d236d1bd8aa49f17e98117db81491d2127c5621464258e7542d95aba77',
+                    '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f')
+    IRC_PREFIX = "E_"
+    IRC_CHANNEL = "#electrum-tes"
+    RPC_PORT = 1857
+    TX_COUNT = 1352122
+    TX_COUNT_HEIGHT = (TX_COUNT * 2)
+    TX_PER_BLOCK = 2
+    DESERIALIZER = lib_tx.DeserializerTxTime
+    ESTIMATE_FEE = 0.1
+    RELAY_FEE = 0.1
+    DAEMON = daemon.FakeEstimateFeeDaemon
+    HEADER_HASH = None
+
+    @classmethod
+    def header_hash(cls, header):
+        '''Given a header return the hash.'''
+        if cls.HEADER_HASH is None:
+            import scrypt
+            cls.HEADER_HASH = lambda x: scrypt.hash(x, x, 1024, 1, 1, 32)
+
+        version, = struct.unpack('<I', header[:4])
+        if version > 6:
+            return super().header_hash(header)
+        else:
+            return cls.HEADER_HASH(header)
