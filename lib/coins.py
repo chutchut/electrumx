@@ -1292,8 +1292,8 @@ class Teslacoin(Coin):
     P2PKH_VERBYTE = bytes.fromhex("0b")
     P2SH_VERBYTES = [bytes.fromhex("08")]
     WIF_BYTE = bytes.fromhex("80")
-    GENESIS_HASH = ('000002d236d1bd8aa49f17e98117db81491d2127c5621464258e7542d95aba77',
-                    '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f')
+    GENESIS_HASH = ('000002d236d1bd8aa49f17e98117db81',
+                    '491d2127c5621464258e7542d95aba77')
     IRC_PREFIX = "E_"
     IRC_CHANNEL = "#electrum-tes"
     RPC_PORT = 1857
