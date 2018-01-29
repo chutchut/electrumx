@@ -86,7 +86,6 @@ class DB(util.LoggedClass):
         tx_counts = self.tx_counts_file.read(0, size)
 
         self.logger.info('DB size: {}, tx_count len: {}'.format(size, len(tx_counts)))
-        self.logger.info('DB tx_count: {}'.format(self.db_tx_count))
         assert len(tx_counts) == size
 
         self.tx_counts = array.array('I', tx_counts)
