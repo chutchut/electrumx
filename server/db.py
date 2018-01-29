@@ -86,10 +86,17 @@ class DB(util.LoggedClass):
         tx_counts = self.tx_counts_file.read(0, size)
         assert len(tx_counts) == size
         self.tx_counts = array.array('I', tx_counts)
-        if self.tx_counts:
-            assert self.db_tx_count == self.tx_counts[-1]
-        else:
-            assert self.db_tx_count == 0
+        expected_tx_count = 0
+        try:
+            if self.tx_counts:
+                expected_tx_count = self.tx_counts[-1]
+                assert self.db_tx_count == self.tx_counts[-1]
+            else:
+                assert self.db_tx_count == 0
+        except AssertionError as ae:
+            self.logger.error('AssertionError in DB.__init__(). Mismatch of tx counts (expected: {}, got: {})'
+                              .format(expected_tx_count, self.db_tx_count))
+            raise ae
 
     def open_dbs(self):
         '''Open the databases.  If already open they are closed and re-opened.
