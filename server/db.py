@@ -84,19 +84,18 @@ class DB(util.LoggedClass):
         # height N.  So tx_counts[0] is 1 - the genesis coinbase
         size = (self.db_height + 1) * 4
         tx_counts = self.tx_counts_file.read(0, size)
+
+        self.logger.info('Db size: {}, tx_count len: {}'.format(size, len(tx_counts)))
+        self.logger.info('Db tx_count: {}'.format(self.db_tx_count))
         assert len(tx_counts) == size
+
         self.tx_counts = array.array('I', tx_counts)
-        expected_tx_count = 0
-        try:
-            if self.tx_counts:
-                expected_tx_count = self.tx_counts[-1]
-                assert self.db_tx_count == self.tx_counts[-1]
-            else:
-                assert self.db_tx_count == 0
-        except AssertionError as ae:
-            self.logger.error('AssertionError in DB.__init__(). Mismatch of tx counts (expected: {}, got: {})'
-                              .format(expected_tx_count, self.db_tx_count))
-            raise ae
+        if self.tx_counts:
+            self.logger.info('self.tx_counts not null, tx_count: {}'.format(self.tx_counts[-1]))
+            assert self.db_tx_count == self.tx_counts[-1]
+        else:
+            self.logger.info('self.tx_counts is null, tx_count: 0')
+            assert self.db_tx_count == 0
 
     def open_dbs(self):
         '''Open the databases.  If already open they are closed and re-opened.
