@@ -85,8 +85,8 @@ class DB(util.LoggedClass):
         size = (self.db_height + 1) * 4
         tx_counts = self.tx_counts_file.read(0, size)
 
-        self.logger.info('Db size: {}, tx_count len: {}'.format(size, len(tx_counts)))
-        self.logger.info('Db tx_count: {}'.format(self.db_tx_count))
+        self.logger.info('DB size: {}, tx_count len: {}'.format(size, len(tx_counts)))
+        self.logger.info('DB tx_count: {}'.format(self.db_tx_count))
         assert len(tx_counts) == size
 
         self.tx_counts = array.array('I', tx_counts)
