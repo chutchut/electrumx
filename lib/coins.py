@@ -1285,7 +1285,7 @@ class Newyorkcoin(AuxPowMixin, Coin):
     REORG_LIMIT = 2000
 
 
-class Teslacoin(Coin):
+class Teslacoin(ScryptMixin, Coin):
     NAME = "Teslacoin"
     SHORTNAME = "TES"
     NET = "mainnet"
@@ -1299,21 +1299,6 @@ class Teslacoin(Coin):
     TX_COUNT = 1352122
     TX_COUNT_HEIGHT = (TX_COUNT * 2)
     TX_PER_BLOCK = 2
-    DESERIALIZER = lib_tx.DeserializerTxTime
     ESTIMATE_FEE = 0.1
     RELAY_FEE = 0.1
     DAEMON = daemon.FakeEstimateFeeDaemon
-    HEADER_HASH = None
-
-    @classmethod
-    def header_hash(cls, header):
-        '''Given a header return the hash.'''
-        if cls.HEADER_HASH is None:
-            import scrypt
-            cls.HEADER_HASH = lambda x: scrypt.hash(x, x, 1024, 1, 1, 32)
-
-        version, = struct.unpack('<I', header[:4])
-        if version > 6:
-            return super().header_hash(header)
-        else:
-            return cls.HEADER_HASH(header)
