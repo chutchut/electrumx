@@ -1302,4 +1302,4 @@ class Teslacoin(ScryptMixin, Coin):
     ESTIMATE_FEE = 0.1
     RELAY_FEE = 0.1
     DAEMON = daemon.FakeEstimateFeeDaemon
-    #CHUNK_SIZE = 1
+    CHUNK_SIZE = 1
