@@ -1094,8 +1094,10 @@ class ElectrumX(SessionBase):
         '''
         assert_tx_hash(tx_hash)
         block_hash, tx_hashes = await self._block_hash_and_tx_hashes(height)
+        # Make a simple list of tx hashes
+        tx_hashes_list = [tx['txid'] for tx in tx_hashes]
         try:
-            pos = tx_hashes.index(tx_hash)
+            pos = tx_hashes_list.index(tx_hash)
         except ValueError:
             raise RPCError(BAD_REQUEST, f'tx hash {tx_hash} not in '
                            f'block {block_hash} at height {height:,d}')
