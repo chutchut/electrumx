@@ -1101,7 +1101,7 @@ class ElectrumX(SessionBase):
         except ValueError:
             raise RPCError(BAD_REQUEST, f'tx hash {tx_hash} not in '
                            f'block {block_hash} at height {height:,d}')
-        branch = self._get_merkle_branch(tx_hashes, pos)
+        branch = self._get_merkle_branch(tx_hashes_list, pos)
         return {"block_height": height, "merkle": branch, "pos": pos}
 
     async def transaction_id_from_pos(self, height, tx_pos, merkle=False):
